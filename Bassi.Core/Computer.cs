@@ -28,5 +28,19 @@ namespace Bassi.Core
 
             }
         }
+
+        public void FindSpecialFolders()
+        {
+            var names = Enum.GetValues(typeof(Environment.SpecialFolder))
+                .OfType<Environment.SpecialFolder>();
+            foreach (var name in names)
+            {
+                var folder = Environment.GetFolderPath(name);
+                if (string.IsNullOrWhiteSpace(folder))
+                    continue;
+                log.InfoFormat("Found special '{0}' {1}", name, folder);
+            }
+
+        }
     }
 }

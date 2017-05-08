@@ -15,6 +15,7 @@ namespace Bassi.Cmd
             BasicConfigurator.Configure();
             var pc = new Computer();
             pc.FindDrives();
+            pc.FindSpecialFolders();
             Console.ReadLine();
         }
     }
