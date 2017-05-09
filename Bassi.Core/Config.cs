@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+
+using static System.Linq.Dynamic.DynamicExpression;
 
 namespace Bassi.Core
 {
@@ -10,6 +13,14 @@ namespace Bassi.Core
         {
             public string Name { get; set; }
             public string Query { get; set; }
+
+            private readonly Lazy<Func<Handle, bool>> lambda;
+            public Func<Handle, bool> ToLambda() => lambda.Value;
+
+            public Filter()
+            {
+                lambda = new Lazy<Func<Handle, bool>>(() => ParseLambda<Handle, bool>(Query).Compile());
+            }
         }
     }
 }

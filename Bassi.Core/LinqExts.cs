@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Bassi.Core
 {
@@ -11,5 +13,8 @@ namespace Bassi.Core
                 dict[item.Key] = item.Value;
             return dict;
         }
+
+        public static IEnumerable<IFilter> ToFilters(this IEnumerable<KeyValuePair<string, Func<Handle, bool>>> pairs)
+            => pairs.Select(p => new LambdaFilter(p.Key, p.Value));
     }
 }

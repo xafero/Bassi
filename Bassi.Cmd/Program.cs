@@ -6,7 +6,6 @@ using System;
 using System.Configuration;
 using System.IO;
 using System.Linq;
-using static Bassi.Core.Config;
 
 namespace Bassi.Cmd
 {
@@ -24,10 +23,11 @@ namespace Bassi.Cmd
             };
             var json = File.ReadAllText(configFile);
             var cfg = JsonConvert.DeserializeObject<Config>(json, jsonCfg);
+            var userFilters = cfg.Filters.ToDictionary(k => k.Name, v => v.ToLambda());
             using (var computer = new Computer())
             {
+                var filters = userFilters.ToFilters().ToArray();
                 var folders = computer.SpecialFolders;
-                var filters = new IFilter[] { /*new PictureFilter(),*/ new VideoFilter(), new DocumentFilter() };
                 foreach (var path in folders.Select(f => f.Value.FullName).Distinct())
                 {
                     try
@@ -37,7 +37,7 @@ namespace Bassi.Cmd
                             var matched = filters.SingleOrDefault(f => f.IsValid(file));
                             if (matched == null)
                                 continue;
-                            Console.WriteLine(matched.GetType().Name + " => " + file);
+                            Console.WriteLine(matched.Name + " => " + file);
                         }
                     }
                     catch (UnauthorizedAccessException)
@@ -46,7 +46,7 @@ namespace Bassi.Cmd
                     }
                 }
 
-                // Console.ReadLine();
+                Console.ReadLine();
             }
         }
     }
