@@ -1,8 +1,12 @@
 ﻿using Bassi.Core;
 using log4net.Config;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
+using System.Configuration;
 using System.IO;
 using System.Linq;
+using static Bassi.Core.Config;
 
 namespace Bassi.Cmd
 {
@@ -11,6 +15,15 @@ namespace Bassi.Cmd
         static void Main(string[] args)
         {
             BasicConfigurator.Configure();
+            var appCfg = ConfigurationManager.AppSettings;
+            var configFile = appCfg["config"];
+            var jsonCfg = new JsonSerializerSettings
+            {
+                Formatting = Formatting.Indented,
+                Converters = { new StringEnumConverter() }
+            };
+            var json = File.ReadAllText(configFile);
+            var cfg = JsonConvert.DeserializeObject<Config>(json, jsonCfg);
             using (var computer = new Computer())
             {
                 var folders = computer.SpecialFolders;
@@ -33,7 +46,7 @@ namespace Bassi.Cmd
                     }
                 }
 
-                Console.ReadLine();
+                // Console.ReadLine();
             }
         }
     }

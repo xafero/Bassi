@@ -36,7 +36,10 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AbstractFilter.cs" />
     <Compile Include="Computer.cs" />
+    <Compile Include="Config.cs" />
+    <Compile Include="IFilter.cs" />
     <Compile Include="LinqExts.cs" />
     <Compile Include="PictureFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
