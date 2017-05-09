@@ -38,6 +38,7 @@
   <ItemGroup>
     <Compile Include="Computer.cs" />
     <Compile Include="LinqExts.cs" />
+    <Compile Include="PictureFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
