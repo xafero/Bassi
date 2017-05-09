@@ -1,10 +1,7 @@
 ﻿using Bassi.Core;
 using log4net.Config;
+using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Bassi.Cmd
 {
@@ -13,9 +10,7 @@ namespace Bassi.Cmd
         static void Main(string[] args)
         {
             BasicConfigurator.Configure();
-            var pc = new Computer();
-            pc.FindDrives();
-            pc.FindSpecialFolders();
+            Console.WriteLine(JsonConvert.SerializeObject(new Computer(), Formatting.Indented));
             Console.ReadLine();
         }
     }
