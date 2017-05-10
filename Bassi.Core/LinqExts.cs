@@ -1,6 +1,8 @@
-﻿using System;
+﻿using ByteSizeLib;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace Bassi.Core
 {
@@ -14,7 +16,24 @@ namespace Bassi.Core
             return dict;
         }
 
-        public static IEnumerable<IFilter> ToFilters(this IEnumerable<KeyValuePair<string, Func<Handle, bool>>> pairs)
+        public static IEnumerable<IFilter> ToFilters(this IEnumerable<KeyValuePair<string, Func<IHandle, bool>>> pairs)
             => pairs.Select(p => new LambdaFilter(p.Key, p.Value));
+
+        public static string Transform(string query)
+        {
+            var builder = new StringBuilder();
+            var parts = query.Split(' ');
+            foreach (var part in parts)
+            {
+                builder.Append(" ");
+                if (ByteSize.TryParse(part, out ByteSize bytes))
+                {
+                    builder.Append(bytes.Bytes);
+                    continue;
+                }
+                builder.Append(part);
+            }
+            return builder.ToString().Trim();
+        }
     }
 }

@@ -1,17 +1,11 @@
-﻿using System.IO;
-
-namespace Bassi.Core
+﻿namespace Bassi.Core
 {
     public abstract class AbstractFilter : IFilter
     {
         public abstract string Name { get; }
 
-        protected abstract bool IsValid(Handle file);
+        protected abstract bool IsValid(IHandle file);
 
-        public bool IsValid(string file)
-        {
-            var ext = Path.GetExtension(file).ToLowerInvariant().TrimStart('.');
-            return IsValid(new Handle { Ext = ext });
-        }
+        public bool IsValid(string file) => IsValid(new Handle(file));
     }
 }
