@@ -1,4 +1,5 @@
 ﻿using ByteSizeLib;
+using Humanizer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,8 +20,14 @@ namespace Bassi.Core
         public static IEnumerable<IFilter> ToFilters(this IEnumerable<KeyValuePair<string, Func<IHandle, bool>>> pairs)
             => pairs.Select(p => new LambdaFilter(p.Key, p.Value));
 
+        public static KeyValuePair<string, DateTime> ToHumanDate(this DateTime dateTime)
+            => new KeyValuePair<string, DateTime>(dateTime.Humanize(), dateTime);
+
         public static string Transform(string query)
         {
+            foreach (var humanDate in Computer.HumanDates)
+                if (query.Contains(humanDate.Key))
+                    query = query.Replace(humanDate.Key, humanDate.Value.Ticks + string.Empty);
             var builder = new StringBuilder();
             var parts = query.Split(' ');
             foreach (var part in parts)

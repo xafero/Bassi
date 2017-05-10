@@ -22,6 +22,9 @@ namespace Bassi.Core
         public string Name { get; }
         public string Ext { get; }
         public long Size => Info.Value.Length;
+        public long Created => Info.Value.CreationTimeUtc.Ticks;
+        public long Accessed => Info.Value.LastAccessTimeUtc.Ticks;
+        public long Changed => Info.Value.LastWriteTimeUtc.Ticks;
     }
 
     public interface IHandle
@@ -30,5 +33,8 @@ namespace Bassi.Core
         string Name { get; }
         string Ext { get; }
         long Size { get; }
+        long Created { get; }
+        long Accessed { get; }
+        long Changed { get; }
     }
 }

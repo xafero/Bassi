@@ -13,6 +13,19 @@ namespace Bassi.Core
 
         public IDictionary<SpecialFolder, DirectoryInfo> SpecialFolders { get; }
         public IDictionary<string, DirectoryInfo> Drives { get; }
+        public static IDictionary<string, DateTime> HumanDates { get; private set; }
+
+        static Computer()
+        {
+            var now = DateTime.UtcNow;
+            HumanDates = Enumerable.Range(0, 60).Select(i => now.AddSeconds(-i).ToHumanDate())
+                        .Concat(Enumerable.Range(0, 60).Select(i => now.AddMinutes(-i).ToHumanDate()))
+                        .Concat(Enumerable.Range(0, 25).Select(i => now.AddHours(-i).ToHumanDate()))
+                        .Concat(Enumerable.Range(0, 32).Select(i => now.AddDays(-i).ToHumanDate()))
+                        .Concat(Enumerable.Range(0, 13).Select(i => now.AddMonths(-i).ToHumanDate()))
+                        .Concat(Enumerable.Range(0, 20).Select(i => now.AddYears(-i).ToHumanDate()))
+                        .ToSimpleDict();
+        }
 
         public Computer()
         {
