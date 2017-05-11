@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Bassi.Core
 {
@@ -13,5 +14,6 @@ namespace Bassi.Core
         long Changed { get; }
         IFilterRef R { get; }
         FileVersionInfo V { get; }
+        IDictionary<string, string> I { get; }
     }
 }

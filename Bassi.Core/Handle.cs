@@ -1,6 +1,9 @@
-﻿using System;
+﻿using MetadataExtractor;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 namespace Bassi.Core
 {
@@ -10,6 +13,7 @@ namespace Bassi.Core
         private Lazy<FileInfo> Info { get; }
         private Lazy<IFilterRef> Refs { get; }
         private Lazy<FileVersionInfo> Version { get; }
+        private Lazy<IDictionary<string,string>> Image { get; }
 
         public Handle(string path, Func<string, IFilter> func)
         {
@@ -20,6 +24,9 @@ namespace Bassi.Core
             Info = new Lazy<FileInfo>(() => new FileInfo(FilePath));
             Refs = new Lazy<IFilterRef>(() => new LambdaRefer(FilePath, func));
             Version = new Lazy<FileVersionInfo>(() => FileVersionInfo.GetVersionInfo(FilePath));
+            Image = new Lazy<IDictionary<string, string>>(() => ImageMetadataReader.ReadMetadata(FilePath)
+                .SelectMany(r => r.Tags).Select(t => new KeyValuePair<string, string>(t.Name, t.Description))
+                .ToSimpleDict());
         }
 
         public string Dir { get; }
@@ -31,5 +38,6 @@ namespace Bassi.Core
         public long Changed => Info.Value.LastWriteTimeUtc.Ticks;
         public IFilterRef R => Refs.Value;
         public FileVersionInfo V => Version.Value;
+        public IDictionary<string, string> I => Image.Value;
     }
 }
