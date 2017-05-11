@@ -57,6 +57,7 @@
     <Compile Include="AbstractFilter.cs" />
     <Compile Include="Computer.cs" />
     <Compile Include="Config.cs" />
+    <Compile Include="FileUtils.cs" />
     <Compile Include="Handle.cs" />
     <Compile Include="IFilter.cs" />
     <Compile Include="IFilterRef.cs" />

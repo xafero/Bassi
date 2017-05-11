@@ -4,7 +4,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
 using System.Configuration;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -41,9 +40,17 @@ namespace Bassi.Cmd
                             if (matched.Key == null || matched.Value == null)
                                 continue;
                             var destDir = matched.Key;
-                            Console.WriteLine($" * [{matched.Value.Name}] {file} => {destDir}");
-                            if (!Directory.Exists(destDir))
-                                Directory.CreateDirectory(destDir);
+                            Console.Write($" * [{matched.Value.Name}] {file} => {destDir}");
+                            FileUtils.CreateDirIfNeeded(destDir);
+                            var origHash = FileUtils.CreateHash(file);
+                            Console.Write($" -> '{origHash}'");
+                            var copyFile = Path.Combine(destDir, Path.GetFileName(file));
+                            FileUtils.Copy(file, copyFile);
+                            var copyHash = FileUtils.CreateHash(copyFile);
+                            if (copyHash != origHash)
+                                throw new InvalidOperationException($"Hash for '{copyFile}' not equal to '{file}'!");
+                            File.Delete(file);
+                            Console.WriteLine($" --> '{copyFile}'!");
                         }
                     }
                     catch (UnauthorizedAccessException)
