@@ -29,7 +29,7 @@ namespace Bassi.Cmd
                 filters = userFilters.ToFilters(GetFilter).ToArray();
                 var userRules = cfg.Rules.ToDictionary(k => Path.Combine(Path.GetFullPath(k.Target), k.Name),
                     v => GetFilter(v.Filter));
-                var folders = computer.SpecialFolders;
+                var folders = computer.SpecialFolders.Where(s => s.Value.FullName.StartsWith(@"C:\Users\")).ToArray();
                 foreach (var path in folders.Select(f => f.Value.FullName).Distinct())
                 {
                     try
@@ -58,7 +58,7 @@ namespace Bassi.Cmd
                         Console.Error.WriteLine("No access to '{0}'!", path);
                     }
                 }
-
+                Console.WriteLine("Done.");
                 Console.ReadLine();
             }
         }
