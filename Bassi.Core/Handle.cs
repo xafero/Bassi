@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 
 namespace Bassi.Core
@@ -8,6 +9,7 @@ namespace Bassi.Core
         private string FilePath { get; }
         private Lazy<FileInfo> Info { get; }
         private Lazy<IFilterRef> Refs { get; }
+        private Lazy<FileVersionInfo> Version { get; }
 
         public Handle(string path, Func<string, IFilter> func)
         {
@@ -17,6 +19,7 @@ namespace Bassi.Core
             Dir = Path.GetDirectoryName(FilePath);
             Info = new Lazy<FileInfo>(() => new FileInfo(FilePath));
             Refs = new Lazy<IFilterRef>(() => new LambdaRefer(FilePath, func));
+            Version = new Lazy<FileVersionInfo>(() => FileVersionInfo.GetVersionInfo(FilePath));
         }
 
         public string Dir { get; }
@@ -27,5 +30,6 @@ namespace Bassi.Core
         public long Accessed => Info.Value.LastAccessTimeUtc.Ticks;
         public long Changed => Info.Value.LastWriteTimeUtc.Ticks;
         public IFilterRef R => Refs.Value;
+        public FileVersionInfo V => Version.Value;
     }
 }

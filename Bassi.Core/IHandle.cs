@@ -1,4 +1,6 @@
-﻿namespace Bassi.Core
+﻿using System.Diagnostics;
+
+namespace Bassi.Core
 {
     public interface IHandle
     {
@@ -10,5 +12,6 @@
         long Accessed { get; }
         long Changed { get; }
         IFilterRef R { get; }
+        FileVersionInfo V { get; }
     }
 }
