@@ -28,6 +28,8 @@ namespace Bassi.Cmd
             using (var computer = new Computer())
             {
                 filters = userFilters.ToFilters(GetFilter).ToArray();
+                var userRules = cfg.Rules.ToDictionary(k => Path.Combine(Path.GetFullPath(k.Target), k.Name),
+                    v => GetFilter(v.Filter));
                 var folders = computer.SpecialFolders;
                 foreach (var path in folders.Select(f => f.Value.FullName).Distinct())
                 {
@@ -35,10 +37,13 @@ namespace Bassi.Cmd
                     {
                         foreach (var file in Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories))
                         {
-                            var matched = filters.SingleOrDefault(f => f.IsValid(file));
-                            if (matched == null)
+                            var matched = userRules.SingleOrDefault(f => f.Value.IsValid(file));
+                            if (matched.Key == null || matched.Value == null)
                                 continue;
-                            Console.WriteLine(matched.Name + " => " + file);
+                            var destDir = matched.Key;
+                            Console.WriteLine($" * [{matched.Value.Name}] {file} => {destDir}");
+                            if (!Directory.Exists(destDir))
+                                Directory.CreateDirectory(destDir);
                         }
                     }
                     catch (UnauthorizedAccessException)
