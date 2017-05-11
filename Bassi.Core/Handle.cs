@@ -1,5 +1,4 @@
-﻿using ByteSizeLib;
-using System;
+﻿using System;
 using System.IO;
 
 namespace Bassi.Core
@@ -8,14 +7,16 @@ namespace Bassi.Core
     {
         private string FilePath { get; }
         private Lazy<FileInfo> Info { get; }
+        private Lazy<IFilterRef> Refs { get; }
 
-        public Handle(string path)
+        public Handle(string path, Func<string, IFilter> func)
         {
             FilePath = Path.GetFullPath(path);
             Ext = Path.GetExtension(FilePath).ToLowerInvariant().TrimStart('.');
             Name = Path.GetFileNameWithoutExtension(FilePath);
             Dir = Path.GetDirectoryName(FilePath);
             Info = new Lazy<FileInfo>(() => new FileInfo(FilePath));
+            Refs = new Lazy<IFilterRef>(() => new LambdaRefer(FilePath, func));
         }
 
         public string Dir { get; }
@@ -25,16 +26,6 @@ namespace Bassi.Core
         public long Created => Info.Value.CreationTimeUtc.Ticks;
         public long Accessed => Info.Value.LastAccessTimeUtc.Ticks;
         public long Changed => Info.Value.LastWriteTimeUtc.Ticks;
-    }
-
-    public interface IHandle
-    {
-        string Dir { get; }
-        string Name { get; }
-        string Ext { get; }
-        long Size { get; }
-        long Created { get; }
-        long Accessed { get; }
-        long Changed { get; }
+        public IFilterRef R => Refs.Value;
     }
 }

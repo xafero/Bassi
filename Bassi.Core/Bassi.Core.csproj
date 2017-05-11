@@ -50,7 +50,10 @@
     <Compile Include="Config.cs" />
     <Compile Include="Handle.cs" />
     <Compile Include="IFilter.cs" />
+    <Compile Include="IFilterRef.cs" />
+    <Compile Include="IHandle.cs" />
     <Compile Include="LambdaFilter.cs" />
+    <Compile Include="LambdaRefer.cs" />
     <Compile Include="LinqExts.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

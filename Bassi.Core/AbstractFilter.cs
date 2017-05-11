@@ -6,6 +6,8 @@
 
         protected abstract bool IsValid(IHandle file);
 
-        public bool IsValid(string file) => IsValid(new Handle(file));
+        protected abstract IFilter GetRef(string name);
+
+        public bool IsValid(string file) => IsValid(new Handle(file, GetRef));
     }
 }

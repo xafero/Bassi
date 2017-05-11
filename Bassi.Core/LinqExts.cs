@@ -17,8 +17,8 @@ namespace Bassi.Core
             return dict;
         }
 
-        public static IEnumerable<IFilter> ToFilters(this IEnumerable<KeyValuePair<string, Func<IHandle, bool>>> pairs)
-            => pairs.Select(p => new LambdaFilter(p.Key, p.Value));
+        public static IEnumerable<IFilter> ToFilters(this IEnumerable<KeyValuePair<string, Func<IHandle, bool>>> pairs,
+            Func<string, IFilter> refer) => pairs.Select(p => new LambdaFilter(p.Key, p.Value, refer));
 
         public static KeyValuePair<string, DateTime> ToHumanDate(this DateTime dateTime)
             => new KeyValuePair<string, DateTime>(dateTime.Humanize(), dateTime);
