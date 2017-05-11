@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
 using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -26,7 +27,7 @@ namespace Bassi.Cmd
             var userFilters = cfg.Filters.ToDictionary(k => k.Name, v => v.ToLambda());
             using (var computer = new Computer())
             {
-                var filters = userFilters.ToFilters().ToArray();
+                filters = userFilters.ToFilters(GetFilter).ToArray();
                 var folders = computer.SpecialFolders;
                 foreach (var path in folders.Select(f => f.Value.FullName).Distinct())
                 {
@@ -49,5 +50,10 @@ namespace Bassi.Cmd
                 Console.ReadLine();
             }
         }
+
+        private static IFilter[] filters;
+
+        private static IFilter GetFilter(string name)
+            => filters.First(f => f.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
     }
 }

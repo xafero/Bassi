@@ -8,6 +8,14 @@ namespace Bassi.Core
     public class Config
     {
         public IList<Filter> Filters { get; set; } = new List<Filter>();
+        public IList<Rule> Rules { get; set; } = new List<Rule>();
+
+        public class Rule
+        {
+            public string Name { get; set; }
+            public string Filter { get; set; }
+            public string Target { get; set; }
+        }
 
         public class Filter
         {
