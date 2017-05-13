@@ -42,5 +42,17 @@ namespace Bassi.Core
             }
             return builder.ToString().Trim();
         }
+
+        public static T Try<T>(Func<T> getter)
+        {
+            try
+            {
+                return getter();
+            }
+            catch (Exception)
+            {
+                return default(T);
+            }
+        }
     }
 }

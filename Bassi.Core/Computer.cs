@@ -41,9 +41,9 @@ namespace Bassi.Core
             foreach (var drive in AllReadyDrives)
             {
                 log.DebugFormat("Found drive '{0}' {1} {2} {3} {4} {5} {6} {7}",
-                    drive.Name, drive.AvailableFreeSpace, drive.DriveFormat,
-                    drive.DriveType, drive.RootDirectory, drive.TotalFreeSpace,
-                    drive.TotalSize, drive.VolumeLabel);
+                    drive.Name, LinqExts.Try(() => drive.AvailableFreeSpace), drive.DriveFormat,
+                    drive.DriveType, drive.RootDirectory, LinqExts.Try(() => drive.TotalFreeSpace),
+                    LinqExts.Try(() => drive.TotalSize), drive.VolumeLabel);
                 var name = drive.VolumeLabel;
                 var info = drive.RootDirectory;
                 if (string.IsNullOrWhiteSpace(name) || !info.Exists)
